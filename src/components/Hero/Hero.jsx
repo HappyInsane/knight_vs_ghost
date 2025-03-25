@@ -105,10 +105,10 @@ function Hero({
   }, [gameState]);
 
   const [state, dispatch] = useReducer(reducer, {
-    //useEffect trigers twice on every page reload, activating TAKE_HIT and COLECT_COIN twice
+    //useEffect trigers twice on every page reload (once on deploy build), activating TAKE_HIT and COLECT_COIN twice
     //so this compensates
     liveCount: 3 + 2,
-    coinCount: 0 - 2,
+    coinCount: 0 - 1,
     position: [(gameGrid.width - 6) / 2, (gameGrid.height - 6) / 2],
     invulnerability: false,
   });
