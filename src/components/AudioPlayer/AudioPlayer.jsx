@@ -12,6 +12,7 @@ function AudioPlayer({ gameState, musicEnabled }) {
 
   const playAudio = (audio) => {
     if (audio) {
+      audio.current.volume = 0.3;
       audio.current.currentTime = 0; // Reset audio to start
       audio.current
         .play()
