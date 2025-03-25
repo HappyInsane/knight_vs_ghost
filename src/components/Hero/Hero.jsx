@@ -105,16 +105,16 @@ function Hero({
   }, [gameState]);
 
   const [state, dispatch] = useReducer(reducer, {
-    //useEffect trigers twice on every page reload (once on deploy build), activating TAKE_HIT and COLECT_COIN twice
-    //so this compensates
-    liveCount: 3 + 2,
-    coinCount: 0 - 1,
+    liveCount: 3,
+    coinCount: 0,
     position: [(gameGrid.width - 6) / 2, (gameGrid.height - 6) / 2],
     invulnerability: false,
   });
 
   useEffect(() => {
-    dispatch({ type: ACTIONS.MOVE, payload: { direction: userInput } });
+    if (gameIsRunning) {
+      dispatch({ type: ACTIONS.MOVE, payload: { direction: userInput } });
+    }
   }, [userInput, rerender]);
 
   useEffect(() => {
@@ -128,28 +128,24 @@ function Hero({
   useEffect(() => {
     if (gameIsRunning) {
       playSound(colectCoinSFX);
+      dispatch({ type: ACTIONS.COLECT_COIN });
     }
-    dispatch({ type: ACTIONS.COLECT_COIN });
   }, [coinColectionNotification]);
 
   useEffect(() => {
-    if (!state.invulnerability) {
+    if (!state.invulnerability && gameIsRunning) {
       dispatch({ type: ACTIONS.TAKE_DAMAGE });
       handleHeroIsHitAnimation();
 
       //react reads the previous render, the real/next render for this value would be 0
       if (state.liveCount === 1) {
-        if (gameIsRunning) {
-          console.log("play death");
-          playSound(deathSFX);
-        }
+        console.log("play death");
+        playSound(deathSFX);
         handleSetFinalScore(state.coinCount);
         dispatch({ type: ACTIONS.RESET });
       } else {
-        if (gameIsRunning) {
-          console.log("play take hit");
-          playSound(takeDamageSFX);
-        }
+        console.log("play take hit");
+        playSound(takeDamageSFX);
         dispatch({ type: ACTIONS.TOGGLE_INVULNERABILITY });
         setTimeout(() => {
           dispatch({ type: ACTIONS.TOGGLE_INVULNERABILITY });

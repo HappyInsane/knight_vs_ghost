@@ -83,16 +83,23 @@ function GameGrid({ handleDisplayStats }) {
   const [gameState, setGameState] = useState(GAME_STATE.START);
 
   //Game covers
-  //Start-game-cover hooks and handlers
+  //Game state hooks
 
   const gameGridRef = useRef(null);
+  const startCoverRef = useRef(null);
+  const restartCoverRef = useRef(null);
 
-  const handleGameStart = () => {
-    setGameState(GAME_STATE.RUNNING);
-    gameGridRef.current.focus();
-  };
+  useEffect(() => {
+    if (gameState === GAME_STATE.START && startCoverRef.current) {
+      startCoverRef.current.focus();
+    } else if (gameState === GAME_STATE.RUNNING && gameGridRef.current) {
+      gameGridRef.current.focus();
+    } else if (gameState === GAME_STATE.RESTART && restartCoverRef.current) {
+      restartCoverRef.current.focus();
+    }
+  }, [gameState]);
 
-  //Restart-game-cover hooks an handlers
+  //Restart-game-cover handlers
   const [finalScore, setFinalScore] = useState(0);
 
   const handleSetFinalScore = (score) => {
@@ -119,12 +126,24 @@ function GameGrid({ handleDisplayStats }) {
       />
       <AudioPlayer gameState={gameState} musicEnabled={musicEnabled} />
       {gameState === GAME_STATE.START && (
-        <StartGameCover handleGameStart={handleGameStart} />
+        <StartGameCover
+          handleGameStart={() => {
+            setGameState(GAME_STATE.RUNNING);
+          }}
+          ref={startCoverRef}
+        />
       )}
       {gameState === GAME_STATE.RESTART && (
         <RestartGameCover
-          handleGameStart={handleGameStart}
+          handleGameStart={() => {
+            setGameState(GAME_STATE.RUNNING);
+          }}
+          handleGameMainMenu={() => {
+            setGameState(GAME_STATE.START);
+          }}
           scoreDisplayed={finalScore}
+          gameState={gameState}
+          ref={restartCoverRef}
         />
       )}
       <div
@@ -172,6 +191,7 @@ function GameGrid({ handleDisplayStats }) {
               heroPosition={heroPosition}
               handleHeroIsHit={handleHeroIsHit}
               key={threshold}
+              gameState={gameState}
             />
           );
         })}

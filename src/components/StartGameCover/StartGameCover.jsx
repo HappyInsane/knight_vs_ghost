@@ -5,7 +5,7 @@ import heroImage from "../../images/hero.gif";
 import { gameGrid } from "../GameGrid/GameGrid";
 import { useRef } from "react";
 
-function StartGameCover({ handleGameStart, playBlankAudio }) {
+function StartGameCover({ handleGameStart, playBlankAudio, ref }) {
   return (
     <>
       <div
@@ -16,6 +16,7 @@ function StartGameCover({ handleGameStart, playBlankAudio }) {
           backgroundColor: "black",
           borderColor: "green",
         }}
+        ref={ref}
       >
         <img
           src={plainsImage}

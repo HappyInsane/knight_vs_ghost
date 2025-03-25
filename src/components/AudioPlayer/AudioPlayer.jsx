@@ -24,6 +24,7 @@ function AudioPlayer({ gameState, musicEnabled }) {
     if (startAudio.current) startAudio.current.pause();
     if (runningAudio.current) runningAudio.current.pause();
     if (restartAudio.current) restartAudio.current.pause();
+    if (restartAudio.current) restartAudio.current.pause();
   };
 
   useEffect(() => {

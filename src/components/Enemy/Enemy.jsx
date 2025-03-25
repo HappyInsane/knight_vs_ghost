@@ -2,7 +2,7 @@ import "./Enemy.css";
 import enemyImage from "../../images/enemy.gif";
 import { useEffect, useState, useReducer } from "react";
 import { hero } from "../Hero/Hero";
-import { gameGrid } from "../GameGrid/GameGrid";
+import { gameGrid, GAME_STATE } from "../GameGrid/GameGrid";
 import {
   overlap,
   generateNewCoinCoordenates,
@@ -52,7 +52,13 @@ function reducer(state, action) {
   }
 }
 
-function Enemy({ heroPosition, handleHeroIsHit, enableThreshold, coinCount }) {
+function Enemy({
+  heroPosition,
+  handleHeroIsHit,
+  enableThreshold,
+  coinCount,
+  gameState,
+}) {
   const [state, dispatch] = useReducer(reducer, {
     position: generateNewCoinCoordenates(gameGrid, enemy, {
       height: hero.height,
@@ -62,6 +68,17 @@ function Enemy({ heroPosition, handleHeroIsHit, enableThreshold, coinCount }) {
     enable: false,
     direction: getRandomIntegerInclusive(0, 2 * Math.PI),
   });
+
+  //Game state aware variable
+  const [gameIsRunning, setGameIsRunning] = useState(false);
+
+  useEffect(() => {
+    if (gameState === GAME_STATE.RUNNING) {
+      setGameIsRunning(true);
+    } else {
+      setGameIsRunning(false);
+    }
+  }, [gameState]);
 
   useEffect(() => {
     if (coinCount === enableThreshold) {
@@ -73,7 +90,7 @@ function Enemy({ heroPosition, handleHeroIsHit, enableThreshold, coinCount }) {
   const [rerender, setRerender] = useState(false);
 
   useEffect(() => {
-    if (state.enable) {
+    if (state.enable && gameIsRunning) {
       dispatch({ type: ACTIONS.MOVE });
       setTimeout(() => setRerender(!rerender), 500 - coinCount * 5);
     }

@@ -1,9 +1,33 @@
 import "./RestartGameCover.css";
 import plainsImage from "../../images/plains.gif";
 import skullImage from "../../images/skull-laugh.gif";
-import { gameGrid } from "../GameGrid/GameGrid";
+import { GAME_STATE, gameGrid } from "../GameGrid/GameGrid";
+import { useRef, useEffect, useState } from "react";
+import skullLaughAudioFile from "../../audios/evil_laugh.mp3";
 
-function RestartGameCover({ handleGameStart, scoreDisplayed }) {
+function RestartGameCover({
+  handleGameMainMenu,
+  handleGameStart,
+  scoreDisplayed,
+  gameState,
+  ref,
+}) {
+  const skullLaughAudio = useRef(new Audio(skullLaughAudioFile));
+  const [laughAudioNotification, setLaughAudioNotification] = useState(false);
+
+  useEffect(() => {
+    if (gameState === GAME_STATE.RESTART) {
+      skullLaughAudio.current.currentTime = 1;
+      skullLaughAudio.current.play();
+      setTimeout(() => {
+        skullLaughAudio.current.pause();
+      }, 1000);
+      setTimeout(() => {
+        setLaughAudioNotification(!laughAudioNotification);
+      }, 1400);
+    }
+  }, [gameState, laughAudioNotification]);
+
   return (
     <>
       <div
@@ -14,6 +38,7 @@ function RestartGameCover({ handleGameStart, scoreDisplayed }) {
           backgroundColor: "black",
           borderColor: "green",
         }}
+        ref={ref}
       >
         <img
           src={plainsImage}
@@ -46,8 +71,18 @@ function RestartGameCover({ handleGameStart, scoreDisplayed }) {
           onClick={() => {
             handleGameStart();
           }}
+          className="restart-button"
         >
           RESTART
+        </button>
+        <br />
+        <button
+          className="main-menu-button"
+          onClick={() => {
+            handleGameMainMenu();
+          }}
+        >
+          MAIN MENU
         </button>
       </div>
     </>
