@@ -1,0 +1,7 @@
+.coins-stat {
+  color: yellow;
+}
+
+.coin-image {
+  transition: height 1s;
+}

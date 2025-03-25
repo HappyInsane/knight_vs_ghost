@@ -1,0 +1,44 @@
+.restart-game-cover {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.541);
+  z-index: 2;
+}
+
+.restart-game-cover button {
+  background-color: none;
+  border-style: solid;
+  border-radius: 10px;
+  height: 80px;
+  width: 200px;
+  font-size: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  position: absolute;
+  bottom: 90px;
+
+  border-color: rgb(0, 161, 0);
+  color: rgb(0, 161, 0);
+  background-color: rgba(0, 0, 0, 0.637);
+
+  transition: all 0.15s;
+}
+
+.restart-game-cover button:hover {
+  border-color: rgb(0, 209, 0);
+  color: rgb(0, 209, 0);
+  background-color: rgb(0, 0, 0);
+}
+
+.final-score {
+  position: absolute;
+  top: 36%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: rgb(0, 209, 0);
+}

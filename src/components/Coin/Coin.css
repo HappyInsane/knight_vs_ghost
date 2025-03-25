@@ -1,0 +1,10 @@
+.coin {
+  position: absolute;
+  border-radius: 5px;
+  /*background-color: yellow;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transform: translate(-50%, -50%);
+}
