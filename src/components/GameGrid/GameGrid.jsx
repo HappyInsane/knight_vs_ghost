@@ -119,6 +119,11 @@ function GameGrid({ handleDisplayStats }) {
   const [musicEnabled, setMusicEnabled] = useState(false);
   const [soundEffectsEnabled, setSoundEffectsEnabled] = useState(true);
 
+  const [musicLoaded, setMusicLoaded] = useState(false);
+  const handleMusicLoaded = () => {
+    setMusicLoaded(true);
+  };
+
   return (
     <div>
       <SoundEffectsButton
@@ -132,6 +137,7 @@ function GameGrid({ handleDisplayStats }) {
       />
       <AudioButton
         musicEnabled={musicEnabled}
+        musicLoaded={musicLoaded}
         toggleMusic={() => {
           setMusicEnabled(!musicEnabled);
         }}
@@ -139,7 +145,11 @@ function GameGrid({ handleDisplayStats }) {
           if (gameState === GAME_STATE.RUNNING) gameGridRef.current.focus();
         }}
       />
-      <AudioPlayer gameState={gameState} musicEnabled={musicEnabled} />
+      <AudioPlayer
+        gameState={gameState}
+        musicEnabled={musicEnabled}
+        handleMusicLoaded={handleMusicLoaded}
+      />
       {gameState === GAME_STATE.START && (
         <StartGameCover
           handleGameStart={() => {
