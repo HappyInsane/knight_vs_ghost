@@ -1,7 +1,7 @@
 import React from "react";
 import "./CoinCounter.css";
 import coinImage from "../../images/coin.gif";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 function CoinCounter({ coinCountDisplayed }) {
   const [coinLogoHeight, setCoinLogoHeight] = useState(45);

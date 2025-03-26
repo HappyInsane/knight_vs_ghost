@@ -8,11 +8,8 @@ import StartGameCover from "../StartGameCover/StartGameCover";
 import RestartGameCover from "../RestartGameCover/RestartGameCover";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import AudioButton from "../AudioButton/AudioButton";
-
-//audiotest
-
-import deathSFXFile from "../../audios/death.mp3";
-import useSound from "use-sound";
+import SoundEffectsButton from "../SoundEffectsButton/SoundEffectsButton";
+import RestartSoundEffectPlayer from "../RestartSoundEffectPlayer/RestartSoundEffectPlayer";
 
 export const gameGrid = {
   height: 560,
@@ -34,7 +31,6 @@ export const EVENT = {
 function GameGrid({ handleDisplayStats }) {
   const [userInput, setUserInput] = useState("");
   const [heroRerender, setHeroRerender] = useState(false);
-  //to notify the hero he has colected a coin
   const [coinColectionNotification, setCoinColectionNotification] =
     useState(false);
   const [heroIsHitNotification, setHeroIsHitNotification] = useState(false);
@@ -93,9 +89,7 @@ function GameGrid({ handleDisplayStats }) {
   //game state manager
   const [gameState, setGameState] = useState(GAME_STATE.START);
 
-  //Game covers
   //Game state hooks
-
   const gameGridRef = useRef(null);
   const startCoverRef = useRef(null);
   const restartCoverRef = useRef(null);
@@ -121,27 +115,21 @@ function GameGrid({ handleDisplayStats }) {
     setCoinCount(0);
   };
 
-  //audio sfx new implementation
+  //sound hooks
   const [musicEnabled, setMusicEnabled] = useState(false);
-  // use effects are slow, not audio things i presume
-  const [deathSFX] = useSound(deathSFXFile);
-
-  useEffect(() => {
-    if (gameState === GAME_STATE.RESTART) {
-      deathSFX();
-    }
-  }, [gameState]);
+  const [soundEffectsEnabled, setSoundEffectsEnabled] = useState(true);
 
   return (
     <div>
-      <button
-        onClick={() => {
-          playCoin();
-          setEventNotification(!eventNotification);
+      <SoundEffectsButton
+        soundEffectsEnabled={soundEffectsEnabled}
+        toggleSoundEffects={() => {
+          setSoundEffectsEnabled(!soundEffectsEnabled);
         }}
-      >
-        SFX
-      </button>
+        onKeyDown={() => {
+          if (gameState === GAME_STATE.RUNNING) gameGridRef.current.focus();
+        }}
+      />
       <AudioButton
         musicEnabled={musicEnabled}
         toggleMusic={() => {
@@ -160,6 +148,10 @@ function GameGrid({ handleDisplayStats }) {
           ref={startCoverRef}
         />
       )}
+      <RestartSoundEffectPlayer
+        soundEffectsEnabled={soundEffectsEnabled}
+        gameState={gameState}
+      />
       {gameState === GAME_STATE.RESTART && (
         <RestartGameCover
           handleGameStart={() => {
@@ -171,6 +163,7 @@ function GameGrid({ handleDisplayStats }) {
           scoreDisplayed={finalScore}
           gameState={gameState}
           ref={restartCoverRef}
+          soundEffectsEnabled={soundEffectsEnabled}
         />
       )}
       <div
@@ -201,6 +194,7 @@ function GameGrid({ handleDisplayStats }) {
           handleHeroIsHitAnimation={handleHeroIsHitAnimation}
           handleSetFinalScore={handleSetFinalScore}
           gameState={gameState}
+          soundEffectsEnabled={soundEffectsEnabled}
         />
         <Coin
           heroPosition={heroPosition}

@@ -97,6 +97,7 @@ function Hero({
   handleHeroIsHitAnimation,
   handleSetFinalScore,
   gameState,
+  soundEffectsEnabled,
 }) {
   const [gameIsRunning, setGameIsRunning] = useState(false);
 
@@ -164,17 +165,23 @@ function Hero({
     }
   }, [userInput]);
 
-  //SFX
+  //Sound Effects
   const [takeDamageSFX] = useSound(takeDamageSFXFile);
   const [colectCoinSFX] = useSound(colectCoinSFXFile);
+  const [deathSFX] = useSound(deathSFXFile);
 
   useEffect(() => {
-    if (state.liveCount !== 3 && gameIsRunning) {
+    if (!soundEffectsEnabled) return;
+    if (gameIsRunning && state.liveCount !== 3) {
       takeDamageSFX();
+    }
+    if (gameState === GAME_STATE.RESTART) {
+      deathSFX();
     }
   }, [state.liveCount]);
 
   useEffect(() => {
+    if (!soundEffectsEnabled) return;
     if (gameIsRunning && state.coinCount !== 0) {
       colectCoinSFX();
     }

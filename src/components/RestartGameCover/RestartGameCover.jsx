@@ -2,38 +2,13 @@ import "./RestartGameCover.css";
 import plainsImage from "../../images/plains.gif";
 import skullImage from "../../images/skull-laugh.gif";
 import { GAME_STATE, gameGrid } from "../GameGrid/GameGrid";
-import { useRef, useEffect, useState } from "react";
-import skullLaughAudioFile from "../../audios/evil_laugh.mp3";
 
 function RestartGameCover({
   handleGameMainMenu,
   handleGameStart,
   scoreDisplayed,
-  gameState,
   ref,
 }) {
-  const skullLaughAudio = useRef(new Audio(skullLaughAudioFile));
-  const [laughAudioNotification, setLaughAudioNotification] = useState(false);
-
-  useEffect(() => {
-    if (gameState === GAME_STATE.RESTART) {
-      skullLaughAudio.current.currentTime = 1;
-      skullLaughAudio.current
-        .play()
-        .then(() => {
-          setTimeout(() => {
-            skullLaughAudio.current.pause();
-          }, 1000);
-          setTimeout(() => {
-            setLaughAudioNotification(!laughAudioNotification);
-          }, 1400);
-        })
-        .catch((error) => {
-          console.error("Audio playback error:", error);
-        });
-    }
-  }, [gameState, laughAudioNotification]);
-
   return (
     <>
       <div

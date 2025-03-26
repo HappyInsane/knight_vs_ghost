@@ -26,8 +26,8 @@ function reducer(state, action) {
       return {
         ...state,
         position: generateNewCoinCoordenates(gameGrid, coin, {
-          height: hero.height,
-          width: hero.width,
+          height: hero.height * 5,
+          width: hero.width * 5,
           position: action.payload.heroPosition,
         }),
         colected: false,

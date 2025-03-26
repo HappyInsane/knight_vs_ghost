@@ -1,53 +1,34 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useEffect } from "react";
+import useSound from "use-sound";
+import { GAME_STATE } from "../GameGrid/GameGrid";
 //audios
 import startAudioFile from "../../audios/main_menu_song.mp3";
 import runningAudioFile from "../../audios/gamming_song.mp3";
 import restartAudioFile from "../../audios/death_song.mp3";
-import { GAME_STATE } from "../GameGrid/GameGrid";
 
 function AudioPlayer({ gameState, musicEnabled }) {
-  const startAudio = useRef(new Audio(startAudioFile));
-  const runningAudio = useRef(new Audio(runningAudioFile));
-  const restartAudio = useRef(new Audio(restartAudioFile));
-
-  const playAudio = (audio) => {
-    if (musicEnabled && audio && audio.current) {
-      const playPromise = audio.current.play();
-
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            audio.current.volume = 0.3;
-            audio.current.currentTime = 0;
-          })
-          .catch((error) => {
-            console.error("Audio playback error:", error);
-          });
-      }
-    }
-  };
+  const [startAudio, startAudioControls] = useSound(startAudioFile);
+  const [runningAudio, runningAudioControls] = useSound(runningAudioFile);
+  const [restartAudio, restartAudioControls] = useSound(restartAudioFile);
 
   const stopAllAudio = () => {
-    if (startAudio.current) startAudio.current.pause();
-    if (runningAudio.current) runningAudio.current.pause();
-    if (restartAudio.current) restartAudio.current.pause();
-    if (restartAudio.current) restartAudio.current.pause();
+    startAudioControls.stop();
+    runningAudioControls.stop();
+    restartAudioControls.stop();
   };
 
   useEffect(() => {
     if (musicEnabled) {
       if (gameState === GAME_STATE.START) {
         stopAllAudio();
-        playAudio(startAudio);
+        startAudio();
       } else if (gameState === GAME_STATE.RUNNING) {
         stopAllAudio();
-        playAudio(runningAudio);
+        runningAudio();
       } else if (gameState === GAME_STATE.RESTART) {
         stopAllAudio();
-        playAudio(restartAudio);
+        restartAudio();
       }
-    } else {
-      stopAllAudio();
     }
   }, [gameState, musicEnabled]);
 }
