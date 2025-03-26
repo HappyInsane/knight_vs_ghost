@@ -18,16 +18,19 @@ function AudioPlayer({ gameState, musicEnabled, handleMusicLoaded }) {
   const [startAudio, startAudioControls] = useSound(startAudioFile, {
     onload: () => setStartLoaded(true),
     onloaderror: () => setStartError(true),
+    loop: true,
   });
 
   const [runningAudio, runningAudioControls] = useSound(runningAudioFile, {
     onload: () => setRunningLoaded(true),
     onloaderror: () => setRunningError(true),
+    loop: true,
   });
 
   const [restartAudio, restartAudioControls] = useSound(restartAudioFile, {
     onload: () => setRestartLoaded(true),
     onloaderror: () => setRestartError(true),
+    loop: true,
   });
 
   const stopAllAudio = () => {
