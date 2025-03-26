@@ -2,7 +2,11 @@ import { GAME_STATE, gameGrid } from "../GameGrid/GameGrid";
 import { useReducer, useEffect, useState, useRef } from "react";
 import "./Hero.css";
 import heroImage from "../../images/hero.gif";
-import { colectCoinSFX, deathSFX, takeDamageSFX } from "../../helpers/audioSFX";
+//SFX
+import colectCoinSFXFile from "../../audios/blip.mp3";
+import takeDamageSFXFile from "../../audios/hit.mp3";
+import deathSFXFile from "../../audios/death.mp3";
+import useSound from "use-sound";
 
 const ACTIONS = {
   MOVE: "move",
@@ -127,7 +131,6 @@ function Hero({
 
   useEffect(() => {
     if (gameIsRunning) {
-      playSound(colectCoinSFX);
       dispatch({ type: ACTIONS.COLECT_COIN });
     }
   }, [coinColectionNotification]);
@@ -139,13 +142,9 @@ function Hero({
 
       //react reads the previous render, the real/next render for this value would be 0
       if (state.liveCount === 1) {
-        console.log("play death");
-        playSound(deathSFX);
         handleSetFinalScore(state.coinCount);
         dispatch({ type: ACTIONS.RESET });
       } else {
-        console.log("play take hit");
-        playSound(takeDamageSFX);
         dispatch({ type: ACTIONS.TOGGLE_INVULNERABILITY });
         setTimeout(() => {
           dispatch({ type: ACTIONS.TOGGLE_INVULNERABILITY });
@@ -165,14 +164,21 @@ function Hero({
     }
   }, [userInput]);
 
-  //hero SFX
+  //SFX
+  const [takeDamageSFX] = useSound(takeDamageSFXFile);
+  const [colectCoinSFX] = useSound(colectCoinSFXFile);
 
-  const playSound = (audioSFX) => {
-    if (audioSFX) {
-      audioSFX.currentTime = 0.1;
-      audioSFX.play();
+  useEffect(() => {
+    if (state.liveCount !== 3 && gameIsRunning) {
+      takeDamageSFX();
     }
-  };
+  }, [state.liveCount]);
+
+  useEffect(() => {
+    if (gameIsRunning && state.coinCount !== 0) {
+      colectCoinSFX();
+    }
+  }, [state.coinCount]);
 
   return (
     <>

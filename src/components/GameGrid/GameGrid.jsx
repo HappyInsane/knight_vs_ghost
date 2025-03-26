@@ -9,6 +9,11 @@ import RestartGameCover from "../RestartGameCover/RestartGameCover";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import AudioButton from "../AudioButton/AudioButton";
 
+//audiotest
+
+import deathSFXFile from "../../audios/death.mp3";
+import useSound from "use-sound";
+
 export const gameGrid = {
   height: 560,
   width: 560,
@@ -18,6 +23,12 @@ export const GAME_STATE = {
   START: "start",
   RUNNING: "running",
   RESTART: "restart",
+};
+
+export const EVENT = {
+  DEATH: "death",
+  HIT: "hit",
+  COLECT_COIN: "colect-coin",
 };
 
 function GameGrid({ handleDisplayStats }) {
@@ -110,11 +121,27 @@ function GameGrid({ handleDisplayStats }) {
     setCoinCount(0);
   };
 
-  //audio management
+  //audio sfx new implementation
   const [musicEnabled, setMusicEnabled] = useState(false);
+  // use effects are slow, not audio things i presume
+  const [deathSFX] = useSound(deathSFXFile);
+
+  useEffect(() => {
+    if (gameState === GAME_STATE.RESTART) {
+      deathSFX();
+    }
+  }, [gameState]);
 
   return (
     <div>
+      <button
+        onClick={() => {
+          playCoin();
+          setEventNotification(!eventNotification);
+        }}
+      >
+        SFX
+      </button>
       <AudioButton
         musicEnabled={musicEnabled}
         toggleMusic={() => {

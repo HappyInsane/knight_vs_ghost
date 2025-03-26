@@ -18,13 +18,19 @@ function RestartGameCover({
   useEffect(() => {
     if (gameState === GAME_STATE.RESTART) {
       skullLaughAudio.current.currentTime = 1;
-      skullLaughAudio.current.play();
-      setTimeout(() => {
-        skullLaughAudio.current.pause();
-      }, 1000);
-      setTimeout(() => {
-        setLaughAudioNotification(!laughAudioNotification);
-      }, 1400);
+      skullLaughAudio.current
+        .play()
+        .then(() => {
+          setTimeout(() => {
+            skullLaughAudio.current.pause();
+          }, 1000);
+          setTimeout(() => {
+            setLaughAudioNotification(!laughAudioNotification);
+          }, 1400);
+        })
+        .catch((error) => {
+          console.error("Audio playback error:", error);
+        });
     }
   }, [gameState, laughAudioNotification]);
 

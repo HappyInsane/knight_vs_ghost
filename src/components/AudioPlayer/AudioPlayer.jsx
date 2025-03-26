@@ -11,12 +11,19 @@ function AudioPlayer({ gameState, musicEnabled }) {
   const restartAudio = useRef(new Audio(restartAudioFile));
 
   const playAudio = (audio) => {
-    if (audio) {
-      audio.current.volume = 0.3;
-      audio.current.currentTime = 0; // Reset audio to start
-      audio.current
-        .play()
-        .catch((error) => console.error("Audio playback error:", error));
+    if (musicEnabled && audio && audio.current) {
+      const playPromise = audio.current.play();
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            audio.current.volume = 0.3;
+            audio.current.currentTime = 0;
+          })
+          .catch((error) => {
+            console.error("Audio playback error:", error);
+          });
+      }
     }
   };
 

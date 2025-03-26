@@ -3,7 +3,6 @@ import "./StartGameCover.css";
 import plainsImage from "../../images/plains.gif";
 import heroImage from "../../images/hero.gif";
 import { gameGrid } from "../GameGrid/GameGrid";
-import { useRef } from "react";
 
 function StartGameCover({ handleGameStart, playBlankAudio, ref }) {
   return (

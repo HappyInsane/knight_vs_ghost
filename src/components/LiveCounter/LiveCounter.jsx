@@ -1,8 +1,22 @@
 import "./LiveCounter.css";
 import heartImage from "../../images/heart.gif";
 import deathImage from "../../images/skull-laugh.gif";
+//sfx
+import { useRef, useState, useEffect } from "react";
+import useSound from "use-sound";
+import takeDamageSFXFile from "../../audios/hit.mp3";
+import deathSFXFile from "../../audios/death.mp3";
 
 function LiveCounter({ liveCountDisplayed }) {
+  //sfx
+  const [takeDamageSFX] = useSound(takeDamageSFXFile);
+  const [deathSFX] = useSound(deathSFXFile);
+  //const [playingSFX, setPlayingSFX] = useState(false);
+  /*
+  useEffect(() => {
+    takeDamageSFX();
+  }, [liveCountDisplayed]);*/
+
   return (
     <div className="lives-stat-container">
       <div className="lives-stat">Lives</div>
@@ -15,6 +29,7 @@ function LiveCounter({ liveCountDisplayed }) {
           width: 150,
           padding: "0px 10px 10px 0px",
         }}
+        onChange={() => console.log("si")}
       >
         {liveCountDisplayed > 0 ? (
           <>
