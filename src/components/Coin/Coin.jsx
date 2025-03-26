@@ -26,8 +26,8 @@ function reducer(state, action) {
       return {
         ...state,
         position: generateNewCoinCoordenates(gameGrid, coin, {
-          height: hero.height * 5,
-          width: hero.width * 5,
+          height: hero.height * 10,
+          width: hero.width * 10,
           position: action.payload.heroPosition,
         }),
         colected: false,
@@ -59,10 +59,12 @@ function Coin({ heroPosition, handleCoinColection }) {
         handleCoinAnimation();
         handleCoinColection();
         dispatch({ type: ACTIONS.COLECT });
-        dispatch({
-          type: ACTIONS.REPOSITION,
-          payload: { heroPosition: heroPosition },
-        });
+        setTimeout(() => {
+          dispatch({
+            type: ACTIONS.REPOSITION,
+            payload: { heroPosition: heroPosition },
+          });
+        }, 10); // A very short delay (10ms)
       }
     }
   }, [heroPosition, state.position]);
