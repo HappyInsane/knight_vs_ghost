@@ -14,7 +14,7 @@
 
 .pause-game-cover-title {
   position: absolute;
-  top: 25%;
+  top: 15%;
   font-size: 50px;
   font-weight: 750;
 }
@@ -29,7 +29,7 @@
   font-weight: 700;
   cursor: pointer;
   position: absolute;
-  bottom: 35%;
+  bottom: 30%;
 
   border-color: rgb(0, 161, 0);
   color: rgb(0, 161, 0);

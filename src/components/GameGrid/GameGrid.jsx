@@ -206,6 +206,9 @@ function GameGrid({ handleDisplayStats }) {
           e.preventDefault();
           handleInput(e.key);
         }}
+        onKeyUp={() => {
+          setUserInput("");
+        }}
         tabIndex={0}
         ref={gameGridRef}
       >
