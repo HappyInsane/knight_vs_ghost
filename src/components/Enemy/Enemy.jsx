@@ -109,7 +109,6 @@ function Enemy({ heroPosition, handleHeroIsHit, coinCount, gameState }) {
     }, 100);
     setTimeout(() => {
       dispatch({ type: ACTIONS.ENABLE, payload: { value: true } });
-      console.log(state.enable);
     }, 1000);
   }, []);
 
