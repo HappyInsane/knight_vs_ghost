@@ -6,6 +6,7 @@ import skullLaughAudioFile from "../../audios/evil_laugh.mp3";
 function RestartSoundEffectPlayer({ gameState, soundEffectsEnabled }) {
   const [skullLaughAudio] = useSound(skullLaughAudioFile, {
     sprite: { cropped: [1000, 500] },
+    volume: 0.4,
   });
 
   const [loopNotification, setLoopNotification] = useState(false);

@@ -1,0 +1,45 @@
+.pause-game-cover {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.514);
+  backdrop-filter: blur(5px);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+
+  outline: none;
+}
+
+.pause-game-cover-title {
+  position: absolute;
+  top: 25%;
+  font-size: 50px;
+  font-weight: 750;
+}
+
+.resume-button {
+  background-color: none;
+  border-style: solid;
+  border-radius: 10px;
+  height: 70px;
+  width: 150px;
+  font-size: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  position: absolute;
+  bottom: 35%;
+
+  border-color: rgb(0, 161, 0);
+  color: rgb(0, 161, 0);
+  background-color: rgba(0, 0, 0, 0.637);
+
+  transition: all 0.15s;
+}
+
+.resume-button:hover {
+  border-color: rgb(0, 209, 0);
+  color: rgb(0, 209, 0);
+  background-color: rgb(0, 0, 0);
+}

@@ -6,6 +6,7 @@ import Coin from "../Coin/Coin";
 import Enemy from "../Enemy/Enemy";
 import StartGameCover from "../StartGameCover/StartGameCover";
 import RestartGameCover from "../RestartGameCover/RestartGameCover";
+import PauseGameCover from "../PauseGameCover/PauseGameCover";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import AudioButton from "../AudioButton/AudioButton";
 import SoundEffectsButton from "../SoundEffectsButton/SoundEffectsButton";
@@ -20,6 +21,7 @@ export const GAME_STATE = {
   START: "start",
   RUNNING: "running",
   RESTART: "restart",
+  PAUSED: "paused",
 };
 
 export const EVENT = {
@@ -45,8 +47,12 @@ function GameGrid({ handleDisplayStats }) {
   ]);
 
   const handleInput = (input) => {
-    setUserInput(input);
-    setHeroRerender(!heroRerender);
+    if (input === "Escape" && gameState === GAME_STATE.RUNNING) {
+      setGameState(GAME_STATE.PAUSED);
+    } else {
+      setUserInput(input);
+      setHeroRerender(!heroRerender);
+    }
   };
 
   const handleNotifyPosition = (position) => {
@@ -93,6 +99,7 @@ function GameGrid({ handleDisplayStats }) {
   const gameGridRef = useRef(null);
   const startCoverRef = useRef(null);
   const restartCoverRef = useRef(null);
+  const pauseCoverRef = useRef(null);
 
   useEffect(() => {
     if (gameState === GAME_STATE.START && startCoverRef.current) {
@@ -101,6 +108,8 @@ function GameGrid({ handleDisplayStats }) {
       gameGridRef.current.focus();
     } else if (gameState === GAME_STATE.RESTART && restartCoverRef.current) {
       restartCoverRef.current.focus();
+    } else if (gameState === GAME_STATE.PAUSED && pauseCoverRef.current) {
+      pauseCoverRef.current.focus();
     }
   }, [gameState]);
 
@@ -164,6 +173,14 @@ function GameGrid({ handleDisplayStats }) {
         soundEffectsEnabled={soundEffectsEnabled}
         gameState={gameState}
       />
+      {gameState === GAME_STATE.PAUSED && (
+        <PauseGameCover
+          handleUnpause={() => {
+            setGameState(GAME_STATE.RUNNING);
+          }}
+          ref={pauseCoverRef}
+        />
+      )}
       {gameState === GAME_STATE.RESTART && (
         <RestartGameCover
           handleGameStart={() => {

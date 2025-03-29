@@ -69,17 +69,6 @@ function Enemy({
     direction: getRandomIntegerInclusive(0, 2 * Math.PI),
   });
 
-  //Game state aware variable
-  const [gameIsRunning, setGameIsRunning] = useState(false);
-
-  useEffect(() => {
-    if (gameState === GAME_STATE.RUNNING) {
-      setGameIsRunning(true);
-    } else {
-      setGameIsRunning(false);
-    }
-  }, [gameState]);
-
   useEffect(() => {
     if (coinCount === enableThreshold) {
       dispatch({ type: ACTIONS.TOGGLE_ENABLE });
@@ -90,11 +79,11 @@ function Enemy({
   const [rerender, setRerender] = useState(false);
 
   useEffect(() => {
-    if (state.enable && gameIsRunning) {
+    if (state.enable && gameState === GAME_STATE.RUNNING) {
       dispatch({ type: ACTIONS.MOVE });
       setTimeout(() => setRerender(!rerender), 500 - coinCount * 5);
     }
-  }, [state.enable, rerender]);
+  }, [state.enable, rerender, gameState]);
 
   useEffect(() => {
     if (

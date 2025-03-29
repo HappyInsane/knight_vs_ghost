@@ -166,9 +166,9 @@ function Hero({
   }, [userInput]);
 
   //Sound Effects
-  const [takeDamageSFX] = useSound(takeDamageSFXFile);
-  const [colectCoinSFX] = useSound(colectCoinSFXFile);
-  const [deathSFX] = useSound(deathSFXFile);
+  const [takeDamageSFX] = useSound(takeDamageSFXFile, { volume: 0.5 });
+  const [colectCoinSFX] = useSound(colectCoinSFXFile, { volume: 0.5 });
+  const [deathSFX] = useSound(deathSFXFile, { volume: 0.5 });
 
   useEffect(() => {
     if (!soundEffectsEnabled) return;
