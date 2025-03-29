@@ -21,7 +21,7 @@ export const coin = {
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.COLECT:
-      return { ...state, colected: true };
+      return { ...state, colected: !state.colected };
     case ACTIONS.REPOSITION:
       return {
         ...state,
@@ -30,7 +30,6 @@ function reducer(state, action) {
           width: hero.width * 10,
           position: action.payload.heroPosition,
         }),
-        colected: false,
       };
     default:
       return state;
@@ -55,7 +54,6 @@ function Coin({ heroPosition, handleCoinColection }) {
           { height: coin.height, width: coin.width, position: state.position }
         )
       ) {
-        setPrevCoinPosition(state.position);
         handleCoinAnimation();
         handleCoinColection();
         dispatch({ type: ACTIONS.COLECT });
@@ -64,28 +62,27 @@ function Coin({ heroPosition, handleCoinColection }) {
             type: ACTIONS.REPOSITION,
             payload: { heroPosition: heroPosition },
           });
-        }, 10); // A very short delay (10ms)
+        }, 1000);
+        setTimeout(() => {
+          dispatch({ type: ACTIONS.COLECT });
+        }, 2000);
       }
     }
   }, [heroPosition, state.position]);
 
   //animation management
-  const [prevCoinPosition, setPrevCoinPosition] = useState(state.position);
 
-  const [coinAnimation, setCoinAnimation] = useState({ top: 0, opacity: 1 });
+  const [coinAnimation, setCoinAnimation] = useState({
+    top: 5,
+    opacity: 1,
+  });
 
   const handleCoinAnimation = () => {
-    setCoinAnimation({ top: 50, opacity: 0 });
+    setCoinAnimation({ top: -20, opacity: 0 });
     setTimeout(() => {
-      setCoinAnimation({ top: 0, opacity: 1 });
-    }, 1000);
+      setCoinAnimation({ top: 5, opacity: 1 });
+    }, 1800);
   };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setPrevCoinPosition(state.position);
-    }, 500);
-  }, [state.position]);
 
   return (
     <>
@@ -96,28 +93,20 @@ function Coin({ heroPosition, handleCoinColection }) {
           width: coin.width,
           top: state.position[1],
           left: state.position[0],
-          opacity: coinAnimation.opacity,
         }}
       >
-        <img src={coinImage} style={{ height: "80%" }} />
-      </div>
-
-      {/*coin-proxy for animations*/}
-      <div
-        className="coin"
-        style={{
-          height: coin.height,
-          width: coin.width,
-          top: prevCoinPosition[1] - coinAnimation.top,
-          left: prevCoinPosition[0],
-          opacity: coinAnimation.opacity,
-          transition:
-            coinAnimation.opacity === 0
-              ? "top ease-in 0.15s, left ease-in 0.15s, opacity 0.25s"
-              : "none",
-        }}
-      >
-        <img src={coinImage} style={{ height: "80%" }} />
+        <img
+          src={coinImage}
+          style={{
+            position: "absolute",
+            top: coinAnimation.top,
+            height: "80%",
+            opacity: coinAnimation.opacity,
+            transition: state.colected
+              ? "top 0.5s, left 0.5s, opacity 0.5s"
+              : "opacity 0.2s",
+          }}
+        />
       </div>
     </>
   );
