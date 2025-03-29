@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import "./GameGrid.css";
 import backgroundImage from "../../images/background.jpg";
-import Hero from "../Hero/Hero.Jsx";
+import Hero from "../Hero/Hero.jsx";
 import Coin from "../Coin/Coin";
 import Enemy from "../Enemy/Enemy";
 import StartGameCover from "../StartGameCover/StartGameCover";
@@ -32,7 +32,8 @@ export const EVENT = {
 
 function GameGrid({ handleDisplayStats }) {
   const [userInput, setUserInput] = useState("");
-  const [heroRerender, setHeroRerender] = useState(false);
+  const [heroRerenderNotification, setHeroRerenderNotification] =
+    useState(false);
   const [coinColectionNotification, setCoinColectionNotification] =
     useState(false);
   const [heroIsHitNotification, setHeroIsHitNotification] = useState(false);
@@ -51,7 +52,7 @@ function GameGrid({ handleDisplayStats }) {
       setGameState(GAME_STATE.PAUSED);
     } else {
       setUserInput(input);
-      setHeroRerender(!heroRerender);
+      setHeroRerenderNotification(!heroRerenderNotification);
     }
   };
 
@@ -135,6 +136,7 @@ function GameGrid({ handleDisplayStats }) {
 
   return (
     <div>
+      {/*Game Music and SFX */}
       <SoundEffectsButton
         soundEffectsEnabled={soundEffectsEnabled}
         toggleSoundEffects={() => {
@@ -159,6 +161,10 @@ function GameGrid({ handleDisplayStats }) {
         musicEnabled={musicEnabled}
         handleMusicLoaded={handleMusicLoaded}
       />
+      <RestartSoundEffectPlayer
+        soundEffectsEnabled={soundEffectsEnabled}
+        gameState={gameState}
+      />
       {/*Game State Covers */}
       {gameState === GAME_STATE.START && (
         <StartGameCover
@@ -168,11 +174,6 @@ function GameGrid({ handleDisplayStats }) {
           ref={startCoverRef}
         />
       )}
-
-      <RestartSoundEffectPlayer
-        soundEffectsEnabled={soundEffectsEnabled}
-        gameState={gameState}
-      />
       {gameState === GAME_STATE.PAUSED && (
         <PauseGameCover
           handleUnpause={() => {
@@ -195,6 +196,7 @@ function GameGrid({ handleDisplayStats }) {
           soundEffectsEnabled={soundEffectsEnabled}
         />
       )}
+      {/*Game Grid*/}
       <div
         className="game-grid"
         style={{
@@ -219,7 +221,7 @@ function GameGrid({ handleDisplayStats }) {
         />
         <Hero
           userInput={userInput}
-          rerender={heroRerender}
+          rerenderNotification={heroRerenderNotification}
           handleDisplayStats={handleDisplayStats}
           handleNotifyPosition={handleNotifyPosition}
           coinColectionNotification={coinColectionNotification}

@@ -89,7 +89,7 @@ function reducer(state, action) {
 
 function Hero({
   userInput,
-  rerender,
+  rerenderNotification,
   handleDisplayStats,
   handleNotifyPosition,
   coinColectionNotification,
@@ -120,7 +120,7 @@ function Hero({
     if (gameIsRunning) {
       dispatch({ type: ACTIONS.MOVE, payload: { direction: userInput } });
     }
-  }, [userInput, rerender]);
+  }, [userInput, rerenderNotification]);
 
   useEffect(() => {
     handleDisplayStats(state.liveCount, state.coinCount);

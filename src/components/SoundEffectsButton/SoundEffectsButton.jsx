@@ -1,3 +1,5 @@
+import "./SoundEffectsButton.css";
+
 function SoundEffectsButton({
   soundEffectsEnabled,
   toggleSoundEffects,

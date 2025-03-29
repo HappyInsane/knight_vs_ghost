@@ -33,6 +33,7 @@
   cursor: pointer;
   border-style: solid;
   font-size: 30px;
+  font-weight: 700;
 
   transition: all 0.15s;
 }
