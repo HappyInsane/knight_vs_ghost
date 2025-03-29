@@ -30,7 +30,7 @@ export const EVENT = {
   COLECT_COIN: "colect-coin",
 };
 
-function GameGrid({ handleDisplayStats }) {
+function GameGrid({ handleDisplayStats, handleDisplayCooldowns }) {
   const [userInput, setUserInput] = useState({ value: "", pressed: false });
   const [heroRerenderNotification, setHeroRerenderNotification] =
     useState(false);
@@ -234,6 +234,7 @@ function GameGrid({ handleDisplayStats }) {
           handleSetFinalScore={handleSetFinalScore}
           gameState={gameState}
           soundEffectsEnabled={soundEffectsEnabled}
+          handleDisplayCooldowns={handleDisplayCooldowns}
         />
         <Coin
           heroPosition={heroPosition}

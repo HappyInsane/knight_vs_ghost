@@ -7,6 +7,8 @@ import { contain, translateDirection } from "../../helpers/interaction";
 import colectCoinSFXFile from "../../audios/blip.mp3";
 import takeDamageSFXFile from "../../audios/hit.mp3";
 import deathSFXFile from "../../audios/death.mp3";
+import dashSFXFile from "../../audios/dash.mp3";
+import habilityUpSFXFile from "../../audios/hability_up.mp3";
 import useSound from "use-sound";
 
 const ACTIONS = {
@@ -15,20 +17,28 @@ const ACTIONS = {
   TAKE_DAMAGE: "take-damage",
   TOGGLE_INVULNERABILITY: "toggle-invulnerability",
   RESET: "reset",
+  DASH: "dash",
 };
 
 export const hero = {
   height: 40,
   width: 30,
   stepSize: 20,
+  dashSize: 70,
+};
+
+export const habilitySpec = {
+  dash: { coolDown: 4000, duration: 100 },
 };
 
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.MOVE:
       const futurePosition = [
-        state.position[0] + hero.stepSize * Math.cos(action.payload.direction),
-        state.position[1] - hero.stepSize * Math.sin(action.payload.direction),
+        state.position[0] +
+          action.payload.magnitude * Math.cos(action.payload.direction),
+        state.position[1] -
+          action.payload.magnitude * Math.sin(action.payload.direction),
       ];
       if (
         !contain(gameGrid, {
@@ -60,6 +70,8 @@ function reducer(state, action) {
         position: [(gameGrid.width - 6) / 2, (gameGrid.height - 6) / 2],
         invulnerability: false,
       };
+    case ACTIONS.DASH:
+      return { ...state };
     default:
       return state;
   }
@@ -75,6 +87,7 @@ function Hero({
   handleSetFinalScore,
   gameState,
   soundEffectsEnabled,
+  handleDisplayCooldowns,
 }) {
   const [gameIsRunning, setGameIsRunning] = useState(false);
 
@@ -94,11 +107,15 @@ function Hero({
   });
 
   //hero movement
+  const [listenForAction, setlistenForAction] = useState(false);
+
   const [moveUp, setMoveUp] = useState(false);
   const [moveDown, setMoveDown] = useState(false);
   const [moveLeft, setMoveLeft] = useState(false);
   const [moveRight, setMoveRight] = useState(false);
-  const [listenForAction, setlistenForAction] = useState(false);
+  //abilities
+  const [performDash, setPerformDash] = useState(false);
+  const [dashOnCooldown, setDashOnCooldown] = useState(false);
 
   const handleResetMovement = () => {
     setMoveUp(false);
@@ -128,6 +145,7 @@ function Hero({
           type: ACTIONS.MOVE,
           payload: {
             direction: curDirection,
+            magnitude: performDash ? hero.dashSize : hero.stepSize,
           },
         });
       }
@@ -138,7 +156,6 @@ function Hero({
 
   useEffect(() => {
     if (gameIsRunning) {
-      console.log(userInput);
       switch (userInput.value.toLowerCase()) {
         case "w":
         case "arrowup":
@@ -173,11 +190,43 @@ function Hero({
           }
           break;
         case " ":
-          console.log("dash");
+          if (userInput.pressed) {
+            if (!dashOnCooldown) {
+              setPerformDash(true);
+              dashSFX();
+              setTimeout(() => {
+                setPerformDash(false);
+              }, habilitySpec.dash.duration);
+              if (!state.invulnerability) {
+                dispatch({ type: ACTIONS.TOGGLE_INVULNERABILITY });
+                setTimeout(() => {
+                  dispatch({ type: ACTIONS.TOGGLE_INVULNERABILITY });
+                }, habilitySpec.dash.duration * 1.5);
+              }
+            }
+          }
+          break;
       }
     }
   }, [userInput]);
 
+  //hability cooldowns
+  useEffect(() => {
+    if (performDash) {
+      setDashOnCooldown(true);
+      setTimeout(() => {
+        setDashOnCooldown(false);
+        habilityUpSFX();
+      }, habilitySpec.dash.coolDown);
+    }
+  }, [performDash]);
+
+  useEffect(() => {
+    if (dashOnCooldown)
+      handleDisplayCooldowns("dash", habilitySpec.dash.coolDown);
+  }, [dashOnCooldown]);
+
+  //Comunication with other components
   useEffect(() => {
     handleDisplayStats(state.liveCount, state.coinCount);
   }, [state.coinCount, state.liveCount]);
@@ -227,6 +276,8 @@ function Hero({
   const [takeDamageSFX] = useSound(takeDamageSFXFile, { volume: 0.5 });
   const [colectCoinSFX] = useSound(colectCoinSFXFile, { volume: 0.5 });
   const [deathSFX] = useSound(deathSFXFile, { volume: 0.5 });
+  const [dashSFX] = useSound(dashSFXFile, { volume: 0.5 });
+  const [habilityUpSFX] = useSound(habilityUpSFXFile, { volume: 0.5 });
 
   useEffect(() => {
     if (!soundEffectsEnabled) return;

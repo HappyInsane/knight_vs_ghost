@@ -4,7 +4,7 @@ import GameGrid from "./components/GameGrid/GameGrid";
 import CoinCounter from "./components/CoinCounter/CoinCounter";
 import LiveCounter from "./components/LiveCounter/LiveCounter";
 import HighScore from "./components/HighScore/HighScore";
-import arrowsImage from "./images/arrows.png";
+import CooldownSection from "./components/CooldownSection/CooldownSection";
 
 function App() {
   const [liveCount, setLiveCount] = useState(3);
@@ -12,6 +12,14 @@ function App() {
   const handleDisplayStats = (liveCount, coinCount) => {
     setLiveCount(liveCount);
     setCoinCount(coinCount);
+  };
+  const [cooldownNotificationList, setCooldownNotificationList] = useState({
+    dash: null,
+  });
+  const handleDisplayCooldowns = (cooldownName, value) => {
+    setCooldownNotificationList((cooldownNotificationList) => {
+      return { ...cooldownNotificationList, [cooldownName]: value };
+    });
   };
 
   return (
@@ -22,7 +30,11 @@ function App() {
           <LiveCounter liveCountDisplayed={liveCount} />
           <HighScore coinCount={coinCount} />
         </div>
-        <GameGrid handleDisplayStats={handleDisplayStats} />
+        <GameGrid
+          handleDisplayStats={handleDisplayStats}
+          handleDisplayCooldowns={handleDisplayCooldowns}
+        />
+        <CooldownSection cooldownNotificationList={cooldownNotificationList} />
       </div>
     </>
   );

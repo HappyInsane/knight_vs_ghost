@@ -31,6 +31,9 @@ function ControlsGameCover({ handleControlsCoverClose }) {
           </div>
         </div>
         <div className="control-options-title">Dash</div>
+        <div style={{ fontSize: 15, opacity: 0.5 }}>
+          Dashing makes you invulnerable for the entire duration of the dash
+        </div>
         <div className="control-options">
           <div className="control-option">
             <img style={{ height: "70px" }} src={spacebarImage} />

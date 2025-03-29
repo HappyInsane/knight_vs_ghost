@@ -1,0 +1,9 @@
+.cooldown-section {
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+}
+
+.cooldown-section-title {
+  font-size: 20px;
+}
