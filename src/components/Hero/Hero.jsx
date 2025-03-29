@@ -18,7 +18,7 @@ const ACTIONS = {
 
 export const hero = {
   height: 40,
-  width: 40,
+  width: 30,
   jump: 50 / 2,
 };
 

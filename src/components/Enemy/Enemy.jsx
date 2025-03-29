@@ -17,7 +17,7 @@ const ACTIONS = {
 
 export const enemy = {
   height: 50,
-  width: 50,
+  width: 30,
   velocity: 30,
 };
 

@@ -4,6 +4,7 @@ import GameGrid from "./components/GameGrid/GameGrid";
 import CoinCounter from "./components/CoinCounter/CoinCounter";
 import LiveCounter from "./components/LiveCounter/LiveCounter";
 import HighScore from "./components/HighScore/HighScore";
+import arrowsImage from "./images/arrows.png";
 
 function App() {
   const [liveCount, setLiveCount] = useState(3);

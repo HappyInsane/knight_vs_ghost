@@ -1,12 +1,20 @@
 import "./StartGameCover.css";
+import { useState } from "react";
 
 import plainsImage from "../../images/plains.gif";
 import heroImage from "../../images/hero.gif";
 import { gameGrid } from "../GameGrid/GameGrid";
+import ControlsGameCover from "../ControlsGameCover/ControlsGameCover";
 
-function StartGameCover({ handleGameStart, playBlankAudio, ref }) {
+function StartGameCover({ handleGameStart, ref }) {
+  const [controlsCoverVisibility, setControlsCoverVisibility] = useState(false);
   return (
     <>
+      {controlsCoverVisibility && (
+        <ControlsGameCover
+          handleControlsCoverClose={() => setControlsCoverVisibility(false)}
+        />
+      )}
       <div
         className="start-game-cover"
         style={{
@@ -22,7 +30,7 @@ function StartGameCover({ handleGameStart, playBlankAudio, ref }) {
           style={{
             position: "absolute",
             height: "100%",
-            borderRadius: "5px",
+            borderRadius: "10px",
             zIndex: 2,
             opacity: 0.8,
           }}
@@ -39,12 +47,20 @@ function StartGameCover({ handleGameStart, playBlankAudio, ref }) {
         />
         <div className="title">KNIGHT vs GHOST</div>
         <button
-          style={{ zIndex: 3 }}
+          className="start-button"
           onClick={() => {
             handleGameStart();
           }}
         >
           START
+        </button>
+        <button
+          className="controls-button"
+          onClick={() => {
+            setControlsCoverVisibility(true);
+          }}
+        >
+          CONTROLS
         </button>
       </div>
     </>

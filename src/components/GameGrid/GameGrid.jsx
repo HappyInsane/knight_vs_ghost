@@ -150,6 +150,7 @@ function GameGrid({ handleDisplayStats }) {
         musicEnabled={musicEnabled}
         handleMusicLoaded={handleMusicLoaded}
       />
+      {/*Game State Covers */}
       {gameState === GAME_STATE.START && (
         <StartGameCover
           handleGameStart={() => {
@@ -158,6 +159,7 @@ function GameGrid({ handleDisplayStats }) {
           ref={startCoverRef}
         />
       )}
+
       <RestartSoundEffectPlayer
         soundEffectsEnabled={soundEffectsEnabled}
         gameState={gameState}
@@ -184,6 +186,7 @@ function GameGrid({ handleDisplayStats }) {
           backgroundColor: gridAnimation.backgroundColor,
         }}
         onKeyDown={(e) => {
+          e.preventDefault();
           handleInput(e.key);
         }}
         tabIndex={0}
