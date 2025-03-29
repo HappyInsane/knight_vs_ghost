@@ -1,7 +1,5 @@
 //Entity Interaction
 
-import { coin } from "../components/Coin/Coin";
-
 /*
 obj : {height:y, width:x, position:[x,y]}
 
@@ -86,4 +84,26 @@ export function generateNewCoinCoordenates(
       return [x, y];
     }
   }
+}
+
+export function translateDirection(up, down, left, right) {
+  let direction = null;
+  if (up && left) {
+    direction = (Math.PI * 3) / 4;
+  } else if (up && right) {
+    direction = Math.PI / 4;
+  } else if (down && left) {
+    direction = (Math.PI * 5) / 4;
+  } else if (down && right) {
+    direction = (Math.PI * 7) / 4;
+  } else if (up && !down) {
+    direction = Math.PI / 2;
+  } else if (down && !up) {
+    direction = (Math.PI * 3) / 2;
+  } else if (left && !right) {
+    direction = Math.PI;
+  } else if (right && !left) {
+    direction = Math.PI * 2;
+  }
+  return direction;
 }

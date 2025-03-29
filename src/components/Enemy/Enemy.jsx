@@ -18,7 +18,7 @@ const ACTIONS = {
 export const enemy = {
   height: 50,
   width: 30,
-  velocity: 30,
+  stepSize: 30,
 };
 
 function reducer(state, action) {
@@ -27,8 +27,8 @@ function reducer(state, action) {
       return { ...state, enable: !state.enable };
     case ACTIONS.MOVE:
       const futurePosition = [
-        state.position[0] + enemy.velocity * Math.cos(state.direction),
-        state.position[1] + enemy.velocity * Math.sin(state.direction),
+        state.position[0] + enemy.stepSize * Math.cos(state.direction),
+        state.position[1] + enemy.stepSize * Math.sin(state.direction),
       ];
       if (
         !contain(gameGrid, {

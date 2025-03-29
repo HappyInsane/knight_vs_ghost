@@ -2,6 +2,7 @@ import { GAME_STATE, gameGrid } from "../GameGrid/GameGrid";
 import { useReducer, useEffect, useState, useRef } from "react";
 import "./Hero.css";
 import heroImage from "../../images/hero.gif";
+import { contain, translateDirection } from "../../helpers/interaction";
 //SFX
 import colectCoinSFXFile from "../../audios/blip.mp3";
 import takeDamageSFXFile from "../../audios/hit.mp3";
@@ -19,54 +20,31 @@ const ACTIONS = {
 export const hero = {
   height: 40,
   width: 30,
-  jump: 50 / 2,
+  stepSize: 20,
 };
 
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.MOVE:
-      switch (action.payload.direction) {
-        case "ArrowUp":
-          if (state.position[1] - hero.jump - hero.height / 2 < 0) {
-            return state;
-          } else {
-            return {
-              ...state,
-              position: [state.position[0], state.position[1] - hero.jump],
-            };
-          }
-        case "ArrowDown":
-          if (
-            state.position[1] + hero.jump + hero.height / 2 >
-            gameGrid.height
-          ) {
-            return state;
-          } else {
-            return {
-              ...state,
-              position: [state.position[0], state.position[1] + hero.jump],
-            };
-          }
-        case "ArrowLeft":
-          if (state.position[0] - hero.jump - hero.width / 2 < 0) {
-            return state;
-          } else {
-            return {
-              ...state,
-              position: [state.position[0] - hero.jump, state.position[1]],
-            };
-          }
-        case "ArrowRight":
-          if (state.position[0] + hero.jump + hero.width / 2 > gameGrid.width) {
-            return state;
-          } else {
-            return {
-              ...state,
-              position: [state.position[0] + hero.jump, state.position[1]],
-            };
-          }
-        default:
-          return state;
+      const futurePosition = [
+        state.position[0] + hero.stepSize * Math.cos(action.payload.direction),
+        state.position[1] - hero.stepSize * Math.sin(action.payload.direction),
+      ];
+      if (
+        !contain(gameGrid, {
+          height: hero.height,
+          width: hero.width,
+          position: futurePosition,
+        })
+      ) {
+        return {
+          ...state,
+        };
+      } else {
+        return {
+          ...state,
+          position: futurePosition,
+        };
       }
     case ACTIONS.COLECT_COIN:
       return { ...state, coinCount: state.coinCount + 1 };
@@ -89,7 +67,6 @@ function reducer(state, action) {
 
 function Hero({
   userInput,
-  rerenderNotification,
   handleDisplayStats,
   handleNotifyPosition,
   coinColectionNotification,
@@ -116,11 +93,90 @@ function Hero({
     invulnerability: false,
   });
 
+  //hero movement
+  const [moveUp, setMoveUp] = useState(false);
+  const [moveDown, setMoveDown] = useState(false);
+  const [moveLeft, setMoveLeft] = useState(false);
+  const [moveRight, setMoveRight] = useState(false);
+  const [listenForAction, setlistenForAction] = useState(false);
+
+  const handleResetMovement = () => {
+    setMoveUp(false);
+    setMoveDown(false);
+    setMoveLeft(false);
+    setMoveRight(false);
+  };
+
+  useEffect(() => {
+    if (gameState === GAME_STATE.RUNNING) {
+      setTimeout(() => {
+        setlistenForAction(!listenForAction);
+      }, 50);
+    }
+  }, [gameState, listenForAction]);
+
+  useEffect(() => {
+    if (gameIsRunning && (moveUp || moveDown || moveLeft || moveRight)) {
+      const curDirection = translateDirection(
+        moveUp,
+        moveDown,
+        moveLeft,
+        moveRight
+      );
+      if (curDirection) {
+        dispatch({
+          type: ACTIONS.MOVE,
+          payload: {
+            direction: curDirection,
+          },
+        });
+      }
+
+      return;
+    }
+  }, [listenForAction]);
+
   useEffect(() => {
     if (gameIsRunning) {
-      dispatch({ type: ACTIONS.MOVE, payload: { direction: userInput } });
+      console.log(userInput);
+      switch (userInput.value.toLowerCase()) {
+        case "w":
+        case "arrowup":
+          if (userInput.pressed) {
+            setMoveUp(true);
+          } else {
+            setMoveUp(false);
+          }
+          break;
+        case "s":
+        case "arrowdown":
+          if (userInput.pressed) {
+            setMoveDown(true);
+          } else {
+            setMoveDown(false);
+          }
+          break;
+        case "a":
+        case "arrowleft":
+          if (userInput.pressed) {
+            setMoveLeft(true);
+          } else {
+            setMoveLeft(false);
+          }
+          break;
+        case "d":
+        case "arrowright":
+          if (userInput.pressed) {
+            setMoveRight(true);
+          } else {
+            setMoveRight(false);
+          }
+          break;
+        case " ":
+          console.log("dash");
+      }
     }
-  }, [userInput, rerenderNotification]);
+  }, [userInput]);
 
   useEffect(() => {
     handleDisplayStats(state.liveCount, state.coinCount);
@@ -136,6 +192,7 @@ function Hero({
     }
   }, [coinColectionNotification]);
 
+  //handle hits and death
   useEffect(() => {
     if (!state.invulnerability && gameIsRunning) {
       dispatch({ type: ACTIONS.TAKE_DAMAGE });
@@ -145,6 +202,7 @@ function Hero({
       if (state.liveCount === 1) {
         handleSetFinalScore(state.coinCount);
         dispatch({ type: ACTIONS.RESET });
+        handleResetMovement();
       } else {
         dispatch({ type: ACTIONS.TOGGLE_INVULNERABILITY });
         setTimeout(() => {
@@ -158,12 +216,12 @@ function Hero({
   const [faceDirection, setFaceDirection] = useState(true);
 
   useEffect(() => {
-    if (userInput == "ArrowLeft") {
+    if (moveLeft && !moveRight) {
       setFaceDirection(false);
-    } else if (userInput == "ArrowRight") {
+    } else if (moveRight && !moveLeft) {
       setFaceDirection(true);
     }
-  }, [userInput]);
+  }, [moveRight, moveLeft]);
 
   //Sound Effects
   const [takeDamageSFX] = useSound(takeDamageSFXFile, { volume: 0.5 });

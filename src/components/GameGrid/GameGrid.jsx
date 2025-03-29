@@ -31,7 +31,7 @@ export const EVENT = {
 };
 
 function GameGrid({ handleDisplayStats }) {
-  const [userInput, setUserInput] = useState("");
+  const [userInput, setUserInput] = useState({ value: "", pressed: false });
   const [heroRerenderNotification, setHeroRerenderNotification] =
     useState(false);
   const [coinColectionNotification, setCoinColectionNotification] =
@@ -48,10 +48,14 @@ function GameGrid({ handleDisplayStats }) {
   ]);
 
   const handleInput = (input) => {
-    if (input === "Escape" && gameState === GAME_STATE.RUNNING) {
+    if (
+      input.value === "Escape" &&
+      input.pressed &&
+      gameState === GAME_STATE.RUNNING
+    ) {
       setGameState(GAME_STATE.PAUSED);
     } else {
-      setUserInput(input);
+      setUserInput({ value: input.value, pressed: input.pressed });
       setHeroRerenderNotification(!heroRerenderNotification);
     }
   };
@@ -206,10 +210,10 @@ function GameGrid({ handleDisplayStats }) {
         }}
         onKeyDown={(e) => {
           e.preventDefault();
-          handleInput(e.key);
+          handleInput({ value: e.key, pressed: true });
         }}
-        onKeyUp={() => {
-          setUserInput("");
+        onKeyUp={(e) => {
+          handleInput({ value: e.key, pressed: false });
         }}
         tabIndex={0}
         ref={gameGridRef}
