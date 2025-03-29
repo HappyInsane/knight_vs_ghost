@@ -89,11 +89,8 @@ function GameGrid({ handleDisplayStats, handleDisplayCooldowns }) {
   const [thresholdArray, setThresholdArray] = useState([]);
 
   useEffect(() => {
-    if ((coinCount + 5) % 10 === 0) {
-      setThresholdArray([...thresholdArray, coinCount + 5]);
-    }
-    if (coinCount === 0) {
-      setThresholdArray([1]);
+    if (coinCount % 10 === 0 || coinCount === 1) {
+      setThresholdArray([...thresholdArray, coinCount]);
     }
   }, [coinCount]);
 
@@ -244,17 +241,27 @@ function GameGrid({ handleDisplayStats, handleDisplayCooldowns }) {
           heroPosition={heroPosition}
           handleCoinColection={handleCoinColection}
         />
+        <Coin
+          heroPosition={heroPosition}
+          handleCoinColection={handleCoinColection}
+        />
+        <Coin
+          heroPosition={heroPosition}
+          handleCoinColection={handleCoinColection}
+        />
         {thresholdArray.map((threshold) => {
-          return (
-            <Enemy
-              enableThreshold={threshold}
-              coinCount={coinCount}
-              heroPosition={heroPosition}
-              handleHeroIsHit={handleHeroIsHit}
-              key={threshold}
-              gameState={gameState}
-            />
-          );
+          if (threshold) {
+            return (
+              <Enemy
+                enableThreshold={threshold}
+                coinCount={coinCount}
+                heroPosition={heroPosition}
+                handleHeroIsHit={handleHeroIsHit}
+                key={threshold}
+                gameState={gameState}
+              />
+            );
+          }
         })}
       </div>
       <br />

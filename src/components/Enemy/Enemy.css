@@ -2,7 +2,6 @@
   position: absolute;
   border-radius: 5px;
   /*background-color: red;*/
-  transition: top 0.1s, left 0.1s;
 
   display: flex;
   align-items: center;

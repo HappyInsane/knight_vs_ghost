@@ -11,20 +11,21 @@ import {
 } from "../../helpers/interaction";
 
 const ACTIONS = {
-  TOGGLE_ENABLE: "toggle-enable",
+  ENABLE: "enable",
   MOVE: "move",
 };
 
 export const enemy = {
-  height: 50,
+  height: 40,
   width: 30,
-  stepSize: 30,
+  stepSize: 25,
+  refreshRate: 200,
 };
 
 function reducer(state, action) {
   switch (action.type) {
-    case ACTIONS.TOGGLE_ENABLE:
-      return { ...state, enable: !state.enable };
+    case ACTIONS.ENABLE:
+      return { ...state, enable: action.payload.value };
     case ACTIONS.MOVE:
       const futurePosition = [
         state.position[0] + enemy.stepSize * Math.cos(state.direction),
@@ -52,28 +53,16 @@ function reducer(state, action) {
   }
 }
 
-function Enemy({
-  heroPosition,
-  handleHeroIsHit,
-  enableThreshold,
-  coinCount,
-  gameState,
-}) {
+function Enemy({ heroPosition, handleHeroIsHit, coinCount, gameState }) {
   const [state, dispatch] = useReducer(reducer, {
     position: generateNewCoinCoordenates(gameGrid, enemy, {
-      height: hero.height,
-      width: hero.width,
+      height: hero.height * 5,
+      width: hero.width * 5,
       position: heroPosition,
     }),
     enable: false,
     direction: getRandomIntegerInclusive(0, 2 * Math.PI),
   });
-
-  useEffect(() => {
-    if (coinCount === enableThreshold) {
-      dispatch({ type: ACTIONS.TOGGLE_ENABLE });
-    }
-  }, [coinCount]);
 
   //movement speed controls
   const [rerender, setRerender] = useState(false);
@@ -81,7 +70,10 @@ function Enemy({
   useEffect(() => {
     if (state.enable && gameState === GAME_STATE.RUNNING) {
       dispatch({ type: ACTIONS.MOVE });
-      setTimeout(() => setRerender(!rerender), 500 - coinCount * 5);
+      setTimeout(
+        () => setRerender(!rerender),
+        enemy.refreshRate - (coinCount * enemy.refreshRate) / 150
+      );
     }
   }, [state.enable, rerender, gameState]);
 
@@ -108,6 +100,19 @@ function Enemy({
     }
   }, [state.direction]);
 
+  //enemy animation
+  const [enemyAnimation, setEnemyAnimation] = useState({ opacity: 0 });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setEnemyAnimation({ opacity: 1 });
+    }, 100);
+    setTimeout(() => {
+      dispatch({ type: ACTIONS.ENABLE, payload: { value: true } });
+      console.log(state.enable);
+    }, 1000);
+  }, []);
+
   return (
     <>
       <div
@@ -117,14 +122,18 @@ function Enemy({
           left: state.position[0],
           height: enemy.height,
           width: enemy.width,
+          transition: `
+          top ${(enemy.refreshRate - coinCount) / 1000}s, 
+          left ${(enemy.refreshRate - coinCount) / 1000}s
+          `,
         }}
       >
         <img
           className="enemy-image"
           src={enemyImage}
           style={{
-            height: "160%",
-            opacity: state.enable ? 1 : 0,
+            height: "210%",
+            opacity: enemyAnimation.opacity,
             transform: faceDirection ? "scaleX(1)" : "scaleX(-1)",
           }}
         />

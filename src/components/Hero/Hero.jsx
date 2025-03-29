@@ -193,7 +193,7 @@ function Hero({
           if (userInput.pressed) {
             if (!dashOnCooldown) {
               setPerformDash(true);
-              dashSFX();
+              if (soundEffectsEnabled) dashSFX();
               setTimeout(() => {
                 setPerformDash(false);
               }, habilitySpec.dash.duration);
@@ -216,7 +216,7 @@ function Hero({
       setDashOnCooldown(true);
       setTimeout(() => {
         setDashOnCooldown(false);
-        habilityUpSFX();
+        if (soundEffectsEnabled) habilityUpSFX();
       }, habilitySpec.dash.coolDown);
     }
   }, [performDash]);
