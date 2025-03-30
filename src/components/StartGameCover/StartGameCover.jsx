@@ -5,14 +5,24 @@ import plainsImage from "../../images/plains.gif";
 import heroImage from "../../images/hero.gif";
 import { gameGrid } from "../GameGrid/GameGrid";
 import ControlsGameCover from "../ControlsGameCover/ControlsGameCover";
+import LeaderBoardCover from "../LeaderBoardCover/LeaderBoardCover";
 
 function StartGameCover({ handleGameStart, ref }) {
   const [controlsCoverVisibility, setControlsCoverVisibility] = useState(false);
+  const [leaderBoardCoverVisibility, setLeaderBoardCoverVisibility] =
+    useState(false);
   return (
     <>
       {controlsCoverVisibility && (
         <ControlsGameCover
           handleControlsCoverClose={() => setControlsCoverVisibility(false)}
+        />
+      )}
+      {leaderBoardCoverVisibility && (
+        <LeaderBoardCover
+          handleLeaderBoardCoverClose={() =>
+            setLeaderBoardCoverVisibility(false)
+          }
         />
       )}
       <div
@@ -53,6 +63,15 @@ function StartGameCover({ handleGameStart, ref }) {
           }}
         >
           START
+        </button>
+        <button
+          className="controls-button"
+          style={{ width: 180 }}
+          onClick={() => {
+            setLeaderBoardCoverVisibility(true);
+          }}
+        >
+          LEADERBOARD
         </button>
         <button
           className="controls-button"

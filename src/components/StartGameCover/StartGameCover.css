@@ -44,7 +44,7 @@
   width: 200px;
   font-size: 50px;
   font-weight: 700;
-  margin-top: 200px;
+  margin: 200px 0px 40px 0px;
 }
 
 .controls-button {
@@ -52,9 +52,8 @@
   width: 150px;
   font-size: 20px;
   font-weight: 300;
-  bottom: 35px;
   z-index: 3;
-  margin-top: 100px;
+  margin-top: 10px;
 }
 
 .author-info {

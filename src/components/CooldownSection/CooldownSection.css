@@ -1,7 +1,14 @@
 .cooldown-section {
+  margin: 0px 20px;
   display: flex;
   flex-direction: column;
   padding: 50px;
+  background-color: rgba(0, 0, 0, 0.027);
+  border-radius: 20px;
+  border-style: solid;
+  border-color: rgba(0, 255, 0, 0.562);
+
+  transition: opacity 0.15s;
 }
 
 .cooldown-section-title {

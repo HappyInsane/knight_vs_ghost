@@ -3,6 +3,7 @@ import { gameGrid } from "../GameGrid/GameGrid";
 import arrowImage from "../../images/ArrowKeys_Pixel.png";
 import keysImage from "../../images/WASD_Pixel.png";
 import spacebarImage from "../../images/Spacebar_Pixel.png";
+import escapekeyImage from "../../images/escapeKey_Pixel.png";
 
 function ControlsGameCover({ handleControlsCoverClose }) {
   return (
@@ -30,13 +31,28 @@ function ControlsGameCover({ handleControlsCoverClose }) {
             />
           </div>
         </div>
-        <div className="control-options-title">Dash</div>
-        <div style={{ fontSize: 15, opacity: 0.5 }}>
-          Dashing makes you invulnerable for the entire duration of the dash
-        </div>
         <div className="control-options">
-          <div className="control-option">
-            <img style={{ height: "70px" }} src={spacebarImage} />
+          <div style={{ margin: "0xp 5px" }}>
+            <div className="control-options-title">Dash</div>
+            <div style={{ fontSize: 15, opacity: 0.5, textAlign: "center" }}>
+              Dashing makes you invulnerable for the entire duration of the dash
+            </div>
+            <div className="control-options">
+              <div className="control-option">
+                <img style={{ height: "40px" }} src={spacebarImage} />
+              </div>
+            </div>
+          </div>
+          <div className="sub-control-options">
+            <div className="control-options-title">Pause</div>
+            <div style={{ fontSize: 15, opacity: 0.5, textAlign: "center" }}>
+              Whilst in the midle of playing a round feel free to stop and chill
+            </div>
+            <div className="control-options">
+              <div className="control-option">
+                <img style={{ height: "40px" }} src={escapekeyImage} />
+              </div>
+            </div>
           </div>
         </div>
       </div>

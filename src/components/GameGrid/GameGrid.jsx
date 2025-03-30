@@ -11,6 +11,7 @@ import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import AudioButton from "../AudioButton/AudioButton";
 import SoundEffectsButton from "../SoundEffectsButton/SoundEffectsButton";
 import RestartSoundEffectPlayer from "../RestartSoundEffectPlayer/RestartSoundEffectPlayer";
+import CooldownSection from "../CooldownSection/CooldownSection.jsx";
 
 export const gameGrid = {
   height: 560,
@@ -30,7 +31,7 @@ export const EVENT = {
   COLECT_COIN: "colect-coin",
 };
 
-function GameGrid({ handleDisplayStats, handleDisplayCooldowns }) {
+function GameGrid({ handleDisplayStats }) {
   const [userInput, setUserInput] = useState({ value: "", pressed: false });
   const [heroRerenderNotification, setHeroRerenderNotification] =
     useState(false);
@@ -126,6 +127,16 @@ function GameGrid({ handleDisplayStats, handleDisplayCooldowns }) {
     setCoinCount(0);
   };
 
+  //cooldowns
+  const [cooldownNotificationList, setCooldownNotificationList] = useState({
+    dash: null,
+  });
+  const handleDisplayCooldowns = (cooldownName, value) => {
+    setCooldownNotificationList((cooldownNotificationList) => {
+      return { ...cooldownNotificationList, [cooldownName]: value };
+    });
+  };
+
   //sound hooks
   const [musicEnabled, setMusicEnabled] = useState(false);
   const [soundEffectsEnabled, setSoundEffectsEnabled] = useState(true);
@@ -198,72 +209,79 @@ function GameGrid({ handleDisplayStats, handleDisplayCooldowns }) {
         />
       )}
       {/*Game Grid*/}
-      <div
-        className="game-grid"
-        style={{
-          height: gameGrid.height,
-          width: gameGrid.width,
-          backgroundColor: gridAnimation.backgroundColor,
-        }}
-        onKeyDown={(e) => {
-          e.preventDefault();
-          handleInput({ value: e.key, pressed: true });
-        }}
-        onKeyUp={(e) => {
-          handleInput({ value: e.key, pressed: false });
-        }}
-        tabIndex={0}
-        ref={gameGridRef}
-      >
-        <img
-          className="background-image"
-          src={backgroundImage}
-          style={{ opacity: gridAnimation.opacity }}
-        />
-        <Hero
-          userInput={userInput}
-          rerenderNotification={heroRerenderNotification}
-          handleDisplayStats={handleDisplayStats}
-          handleNotifyPosition={handleNotifyPosition}
-          coinColectionNotification={coinColectionNotification}
-          heroIsHitNotification={heroIsHitNotification}
-          handleHeroIsHitAnimation={handleHeroIsHitAnimation}
-          handleSetFinalScore={handleSetFinalScore}
+      <div className="game-grid-container">
+        <div
+          className="game-grid"
+          style={{
+            height: gameGrid.height,
+            width: gameGrid.width,
+            backgroundColor: gridAnimation.backgroundColor,
+          }}
+          onKeyDown={(e) => {
+            e.preventDefault();
+            handleInput({ value: e.key, pressed: true });
+          }}
+          onKeyUp={(e) => {
+            handleInput({ value: e.key, pressed: false });
+          }}
+          tabIndex={0}
+          ref={gameGridRef}
+        >
+          <img
+            className="background-image"
+            src={backgroundImage}
+            style={{ opacity: gridAnimation.opacity }}
+          />
+          <Hero
+            userInput={userInput}
+            rerenderNotification={heroRerenderNotification}
+            handleDisplayStats={handleDisplayStats}
+            handleNotifyPosition={handleNotifyPosition}
+            coinColectionNotification={coinColectionNotification}
+            heroIsHitNotification={heroIsHitNotification}
+            handleHeroIsHitAnimation={handleHeroIsHitAnimation}
+            handleSetFinalScore={handleSetFinalScore}
+            gameState={gameState}
+            soundEffectsEnabled={soundEffectsEnabled}
+            handleDisplayCooldowns={handleDisplayCooldowns}
+          />
+          <Coin
+            heroPosition={heroPosition}
+            handleCoinColection={handleCoinColection}
+          />
+          <Coin
+            heroPosition={heroPosition}
+            handleCoinColection={handleCoinColection}
+          />
+          <Coin
+            heroPosition={heroPosition}
+            handleCoinColection={handleCoinColection}
+          />
+          <Coin
+            heroPosition={heroPosition}
+            handleCoinColection={handleCoinColection}
+          />
+          {thresholdArray.map((threshold) => {
+            if (threshold) {
+              return (
+                <Enemy
+                  enableThreshold={threshold}
+                  coinCount={coinCount}
+                  heroPosition={heroPosition}
+                  handleHeroIsHit={handleHeroIsHit}
+                  key={threshold}
+                  gameState={gameState}
+                />
+              );
+            }
+          })}
+        </div>
+        <CooldownSection
+          cooldownNotificationList={cooldownNotificationList}
           gameState={gameState}
-          soundEffectsEnabled={soundEffectsEnabled}
-          handleDisplayCooldowns={handleDisplayCooldowns}
         />
-        <Coin
-          heroPosition={heroPosition}
-          handleCoinColection={handleCoinColection}
-        />
-        <Coin
-          heroPosition={heroPosition}
-          handleCoinColection={handleCoinColection}
-        />
-        <Coin
-          heroPosition={heroPosition}
-          handleCoinColection={handleCoinColection}
-        />
-        <Coin
-          heroPosition={heroPosition}
-          handleCoinColection={handleCoinColection}
-        />
-        {thresholdArray.map((threshold) => {
-          if (threshold) {
-            return (
-              <Enemy
-                enableThreshold={threshold}
-                coinCount={coinCount}
-                heroPosition={heroPosition}
-                handleHeroIsHit={handleHeroIsHit}
-                key={threshold}
-                gameState={gameState}
-              />
-            );
-          }
-        })}
       </div>
+
       <br />
       <div className="author-info">
         <div>Created by Diego Garcia</div>

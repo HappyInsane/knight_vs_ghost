@@ -206,6 +206,10 @@ function Hero({
             }
           }
           break;
+        case "escape":
+          //if the game is pused before finishing the dash the movement is after unpause needs to be stoped
+          handleResetMovement();
+          break;
       }
     }
   }, [userInput]);

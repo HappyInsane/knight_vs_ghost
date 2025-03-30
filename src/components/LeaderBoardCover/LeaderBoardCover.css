@@ -1,0 +1,98 @@
+.leader-board-game-cover {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.486);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  z-index: 4;
+  border-radius: 10px;
+}
+
+.leader-board-game-cover .header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.leader-board-game-cover .close-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-color: rgb(0, 161, 0);
+  color: rgb(0, 161, 0);
+  background-color: rgba(0, 0, 0, 0.637);
+  z-index: 3;
+  border-radius: 10px;
+  cursor: pointer;
+  border-style: solid;
+  font-size: 30px;
+  font-weight: 700;
+
+  transition: all 0.15s;
+}
+
+.leader-board-game-cover .close-button:hover {
+  border-color: rgb(0, 209, 0);
+  color: rgb(0, 209, 0);
+  background-color: rgb(0, 0, 0);
+}
+
+.leader-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: top;
+  margin-top: 10px;
+  padding: 20px;
+  height: 450px;
+  overflow: auto;
+  border-radius: 20px;
+}
+
+.leader-board-user {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  text-align: center;
+  border-style: solid;
+  margin: 5px 0px;
+  border-radius: 20px;
+  font-size: 30px;
+  width: 100%;
+  padding: 20px;
+}
+
+.placement-number-container {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Target the scrollbar itself */
+.leader-board::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+/* Target the track (the area behind the thumb) */
+.leader-board::-webkit-scrollbar-track {
+  background: #000000a1; /* Color of the track */
+  border-radius: 7px;
+}
+
+/* Target the thumb (the draggable part) */
+.leader-board::-webkit-scrollbar-thumb {
+  background: rgb(0, 161, 0); /* Color of the thumb */
+  border-radius: 6px; /* Rounded corners */
+}
+
+/* Target the thumb on hover */
+.leader-board::-webkit-scrollbar-thumb:hover {
+  background: rgb(0, 209, 0); /* Color on hover */
+}
