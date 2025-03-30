@@ -8,7 +8,10 @@ function CooldownSection({ cooldownNotificationList, gameState }) {
       <div
         className="cooldown-section"
         style={{
-          opacity: gameState === GAME_STATE.RUNNING ? 1 : 0,
+          opacity:
+            gameState === GAME_STATE.RUNNING || gameState === GAME_STATE.PAUSED
+              ? 1
+              : 0,
         }}
       >
         <div className="cooldown-section-title">COOLDOWNS</div>

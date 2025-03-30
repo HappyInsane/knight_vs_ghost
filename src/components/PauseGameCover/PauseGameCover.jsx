@@ -22,6 +22,9 @@ function PauseGameCover({ handleUnpause, ref }) {
         <button className="resume-button" onClick={handleUnpause}>
           RESUME
         </button>
+        <div className="note">
+          You can wait here for your cooldowns to recover . . .
+        </div>
       </div>
     </>
   );
