@@ -20,12 +20,17 @@ function HighScore({ coinCount }) {
     try {
       const res = localStorage.getItem("highScore");
       if (res) {
-        return JSON.parse(res);
+        const parsed = JSON.parse(res);
+        // Check if the value is a number, and convert it into the new object format
+        if (typeof parsed === "number") {
+          return { value: parsed, uploaded: false };
+        }
+        return parsed; // Use the existing object if valid
       }
     } catch (error) {
-      console.error("Error accessing localStorage:", error);
+      console.error("Error parsing highScore from localStorage:", error);
     }
-    return { value: 0, uploaded: false };
+    return { value: 0, uploaded: false }; // Default value
   });
 
   //Upload menu
