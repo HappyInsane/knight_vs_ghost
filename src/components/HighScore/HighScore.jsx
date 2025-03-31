@@ -19,13 +19,19 @@ function HighScore({ coinCount }) {
   const [highScore, setHighScore] = useState(() => {
     try {
       const res = localStorage.getItem("highScore");
+
       if (res) {
         const parsed = JSON.parse(res);
-        // Check if the value is a number, and convert it into the new object format
-        if (typeof parsed === "number") {
-          return { value: parsed, uploaded: false };
+        if (
+          typeof parsed === "object" &&
+          parsed !== null &&
+          "value" in parsed &&
+          "uploaded" in parsed
+        ) {
+          return parsed;
         }
-        return parsed; // Use the existing object if valid
+        console.log(res);
+        console.log(JSON.parse(res));
       }
     } catch (error) {
       console.error("Error parsing highScore from localStorage:", error);
@@ -101,7 +107,7 @@ function HighScore({ coinCount }) {
   };
 
   useEffect(() => {
-    if (!highScore.uploaded) {
+    if (!highScore.uploaded && highScore.value > 0) {
       setUploadButtonVisibility(true);
     }
   }, [highScore]);
