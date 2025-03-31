@@ -17,10 +17,15 @@ function HighScore({ coinCount }) {
 
   //initialize local HS
   const [highScore, setHighScore] = useState(() => {
-    const res = localStorage.getItem("highScore");
-    if (res) {
-      return JSON.parse(res);
-    } else return { value: 0, uploaded: false };
+    try {
+      const res = localStorage.getItem("highScore");
+      if (res) {
+        return JSON.parse(res);
+      }
+    } catch (error) {
+      console.error("Error accessing localStorage:", error);
+    }
+    return { value: 0, uploaded: false };
   });
 
   //Upload menu
