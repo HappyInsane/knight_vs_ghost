@@ -32,7 +32,7 @@ function ControlsGameCover({ handleControlsCoverClose }) {
           </div>
         </div>
         <div className="control-options">
-          <div style={{ margin: "0xp 5px" }}>
+          <div className="sub-control-options">
             <div className="control-options-title">Dash</div>
             <div style={{ fontSize: 15, opacity: 0.5, textAlign: "center" }}>
               Dashing makes you invulnerable for the entire duration of the dash
@@ -46,7 +46,8 @@ function ControlsGameCover({ handleControlsCoverClose }) {
           <div className="sub-control-options">
             <div className="control-options-title">Pause</div>
             <div style={{ fontSize: 15, opacity: 0.5, textAlign: "center" }}>
-              Whilst in the midle of playing a round feel free to stop and chill
+              Whilst in the middle of playing a round feel free to stop and
+              chill
             </div>
             <div className="control-options">
               <div className="control-option">
